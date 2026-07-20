@@ -1,0 +1,120 @@
+// ── Outer wrapper ─────────────────────────────────────────────────────────────
+.pc {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 900px;
+
+  // ── Two-column selector + card row ────────────────────────────────────────
+  &__columns {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  &__divider {
+    flex-shrink: 0;
+    width: 56px;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #57606a;
+    padding-top: 2.25rem; // aligns with the selectors
+  }
+}
+
+// ── Player column ─────────────────────────────────────────────────────────────
+.pc-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+}
+
+// ── Player card inside compare ────────────────────────────────────────────────
+.pc-card {
+  text-align: center;
+  padding: 1.25rem 1rem;
+
+  &--empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 140px;
+    color: #57606a;
+    font-size: 0.875rem;
+    font-style: italic;
+    border: 1px dashed #e5e7eb;
+    border-radius: 4px;
+    background: #fafafa;
+  }
+
+  &__photo-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+  }
+
+  &__photo {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e5e7eb;
+  }
+
+  &__name {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+  }
+}
+
+// ── Stat comparison table ─────────────────────────────────────────────────────
+.pc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+
+  &__cell {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid #e5e7eb;
+
+    &--left  { text-align: right; width: 38%; }
+    &--mid   { text-align: center; width: 24%; color: #57606a; font-size: 0.8rem; }
+    &--right { text-align: left;  width: 38%; }
+
+    &--val   { font-weight: 500; }
+
+    // stat label row in thead
+    &--stat  { font-weight: 600; color: #1f2328; font-size: 0.8125rem; }
+
+    // win  → green tint + bold
+    &--win  {
+      color: #1a7f37;
+      font-weight: 700;
+      background: #dafbe1;
+    }
+
+    // lose → muted red
+    &--lose {
+      color: #cf222e;
+      background: #fff0f0;
+    }
+  }
+
+  // header row (player names)
+  thead .pc-table__cell {
+    font-weight: 700;
+    font-size: 0.8125rem;
+    color: #1f2328;
+    background: #f7f8fa;
+    border-bottom: 2px solid #e5e7eb;
+  }
+
+  tbody tr:last-child .pc-table__cell {
+    border-bottom: none;
+  }
+}

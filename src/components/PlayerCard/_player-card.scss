@@ -1,0 +1,81 @@
+.player-card {
+  margin-top: 1.5rem;
+  text-align: center;
+
+  &__photo-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+
+  &__photo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e5e7eb;
+  }
+
+  &__name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+  }
+
+  &__stats {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+  }
+
+  &__stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e5e7eb;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__stat-label {
+    color: #57606a;
+    font-size: 0.875rem;
+  }
+
+  &__stat-value {
+    font-weight: 500;
+    font-size: 0.875rem;
+  }
+}
+
+.player-wiki {
+  margin-top: 1rem;
+  padding: 1rem 1.25rem;
+  background: #f7f8fa;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
+  text-align: left;
+
+  &__label {
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin: 0 0 0.5rem;
+    color: #1f2328;
+  }
+
+  &__text {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin: 0 0 0.75rem;
+    color: #1f2328;
+  }
+
+  &__source {
+    font-size: 0.75rem;
+    color: #57606a;
+    margin: 0;
+  }
+}
