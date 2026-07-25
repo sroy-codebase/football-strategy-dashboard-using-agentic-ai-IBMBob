@@ -1,0 +1,128 @@
+.ts {
+  width: 520px;               // matches the FormationBoard width
+  align-self: center;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+  animation: ts-in 0.25s ease-out;
+
+  // ── Heading ──────────────────────────────────────────────────────────────
+  &__heading {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: #1f2328;
+    margin: 0 0 0.75rem;
+    letter-spacing: 0.01em;
+  }
+
+  // ── Stars ─────────────────────────────────────────────────────────────────
+  &__stars {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 0.5rem;
+  }
+
+  &__star {
+    font-size: 1.25rem;
+    line-height: 1;
+
+    &--empty {
+      color: #d1d5db;
+    }
+  }
+
+  // ── Numeric score ─────────────────────────────────────────────────────────
+  &__number {
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 0.875rem;
+  }
+
+  &__denom {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #57606a;
+  }
+
+  // ── Progress bar ──────────────────────────────────────────────────────────
+  &__bar-track {
+    height: 10px;
+    border-radius: 999px;
+    background: #f3f4f6;
+    overflow: hidden;
+    margin-bottom: 0.3rem;
+  }
+
+  &__bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    transition: width 16ms linear;   // JS drives the value; CSS just smooths frames
+  }
+
+  &__bar-pct {
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 0.875rem;
+  }
+
+  // ── Label pill ────────────────────────────────────────────────────────────
+  &__label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    border-radius: 6px;
+    padding: 0.4rem 0.75rem;
+    margin: 0 0 1rem;
+    display: inline-block;
+  }
+
+  // ── Breakdown ─────────────────────────────────────────────────────────────
+  &__breakdown {
+    border-top: 1px solid #e5e7eb;
+    padding-top: 0.75rem;
+  }
+
+  &__breakdown-toggle {
+    font-size: 0.8125rem;
+    color: #57606a;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+
+    &::-webkit-details-marker { display: none; }
+
+    &::before {
+      content: '▸ ';
+      font-size: 0.75rem;
+    }
+  }
+
+  details[open] &__breakdown-toggle::before {
+    content: '▾ ';
+  }
+
+  &__breakdown-list {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  &__breakdown-list li {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8125rem;
+  }
+
+  &__breakdown-key { color: #57606a; }
+  &__breakdown-val { font-weight: 600; color: #1f2328; }
+}
+
+@keyframes ts-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}

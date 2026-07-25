@@ -6,6 +6,8 @@ import PlayerCard from './components/PlayerCard/PlayerCard';
 import FormationBoard from './components/FormationBoard/FormationBoard';
 import PlayerCompare from './components/PlayerCompare/PlayerCompare';
 import { generateRandomTeam, FORMATIONS, DEFAULT_FORMATION } from './utils/teamGenerator';
+import { calcTeamScore } from './utils/teamScore';
+import TeamScore from './components/TeamScore/TeamScore';
 import './App.scss';
 
 function App() {
@@ -93,6 +95,10 @@ function App() {
                 </div>
               )}
             </div>
+
+            {teamPlayers.length >= 11 && (
+              <TeamScore score={calcTeamScore(teamPlayers)} />
+            )}
           </div>
         )}
 
