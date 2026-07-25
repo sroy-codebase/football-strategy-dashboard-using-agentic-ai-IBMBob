@@ -20,7 +20,7 @@ import './_header.scss';
 const AppHeader = ({ activePage, onNavigate }) => (
   <Header aria-label="Player Dashboard">
     <SkipToContent />
-    <HeaderName href="#" prefix="IBM">
+    <HeaderName href="#" prefix="Football">
       Player Dashboard
     </HeaderName>
 

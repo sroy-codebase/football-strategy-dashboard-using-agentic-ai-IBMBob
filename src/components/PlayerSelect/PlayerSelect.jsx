@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Select, SelectItem } from '@carbon/react';
+import { ComboBox, Select, SelectItem, Button } from '@carbon/react';
+import { Reset } from '@carbon/icons-react'; // Carbon icon for reset button
 
 const POSITIONS = ['Goalkeeper', 'Defender', 'Midfielder', 'Attacker'];
 
@@ -18,29 +19,34 @@ const SORT_OPTIONS = [
 /**
  * @param {{ players: Array<{name: string, position: string, form_rating: number, age: number}>, onSelect: (name: string) => void }} props
  */
-function PlayerSelect({ players, onSelect }) {
-  const [positionFilter, setPositionFilter] = useState('');
-  const [searchQuery, setSearchQuery]       = useState('');
-  const [sortValue, setSortValue]           = useState('name-asc');
+function PlayerSelect({ players = [], onSelect }) {
+  const [positionFilter, setPositionFilter]         = useState('');
+  const [searchQuery, setSearchQuery]               = useState('');
+  const [sortValue, setSortValue]                   = useState('name-asc');
+  const [selectedPlayerName, setSelectedPlayerName] = useState('');
 
+  // 1. Filter and sort player list dynamically
   const processed = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
 
-    // 1. position filter
+    // Filter by position
     let list = positionFilter
       ? players.filter((p) => p.position === positionFilter)
       : [...players];
 
-    // 2. search filter
+    // Filter by search query
     if (q) {
-      list = list.filter((p) =>
-        p.name.toLowerCase().includes(q) ||
-        (p.citizenship  && p.citizenship.toLowerCase().includes(q)) ||
-        (p.club         && p.club.toLowerCase().includes(q))
-      );
+      list = list.filter((p) => {
+        const nameMatch = p.name ? p.name.toLowerCase().includes(q) : false;
+        const nationalityMatch = p.nationality ? p.nationality.toLowerCase().includes(q) : false;
+        const citizenshipMatch = p.citizenship ? p.citizenship.toLowerCase().includes(q) : false;
+        const clubMatch = p.club ? p.club.toLowerCase().includes(q) : false;
+
+        return nameMatch || nationalityMatch || citizenshipMatch || clubMatch;
+      });
     }
 
-    // 3. sort
+    // Sort list
     const opt = SORT_OPTIONS.find((o) => o.value === sortValue) || SORT_OPTIONS[0];
     list.sort((a, b) => {
       const av = a[opt.field] ?? (typeof a[opt.field] === 'string' ? '' : -Infinity);
@@ -51,47 +57,57 @@ function PlayerSelect({ players, onSelect }) {
     });
 
     return list;
-  }, [players, positionFilter, sortValue]);
+  }, [players, positionFilter, searchQuery, sortValue]);
 
+  // Handle player selection
+  function handlePlayerSelect(name) {
+    setSelectedPlayerName(name);
+    onSelect(name);
+  }
+
+  // Dynamic reset when position changes
   function handlePositionChange(e) {
     setPositionFilter(e.target.value);
+    setSelectedPlayerName('');
     onSelect('');
   }
 
-  function handleSearchChange(e) {
-    setSearchQuery(e.target.value);
-    onSelect('');
-  }
-
-  function handleSearchClear() {
-    setSearchQuery('');
-    onSelect('');
-  }
-
+  // Dynamic reset when sort changes
   function handleSortChange(e) {
     setSortValue(e.target.value);
+  }
+
+  // GLOBAL RESET BUTTON ACTION
+  function handleResetAll() {
+    setPositionFilter('');
+    setSearchQuery('');
+    setSortValue('name-asc');
+    setSelectedPlayerName('');
     onSelect('');
   }
 
-  function handlePlayerChange(e) {
-    onSelect(e.target.value);
-  }
-
-  // Reset the player dropdown whenever filter, search, or sort changes
-  const playerSelectKey = `${positionFilter}::${searchQuery}::${sortValue}`;
+  // Dynamic Key to force ComboBox and Select inputs to re-render when filters reset
+  const resetKey = `${positionFilter}::${searchQuery}::${sortValue}::${selectedPlayerName}`;
 
   return (
-    <div className="player-select">
-      <Search
-        id="player-search"
-        labelText="Search players"
+    <div className="player-select" key={resetKey}>
+      {/* 1. SEARCH WITH AUTO-SUGGEST */}
+      <ComboBox
+        id="player-search-autosuggest"
+        titleText="Search players"
         placeholder="Name, club or nationality…"
-        value={searchQuery}
-        onChange={handleSearchChange}
-        onClear={handleSearchClear}
+        items={processed}
+        itemToString={(item) => (item ? item.name : '')}
+        onInputChange={(text) => setSearchQuery(text || '')}
+        onChange={({ selectedItem }) => {
+          if (selectedItem) {
+            handlePlayerSelect(selectedItem.name);
+          }
+        }}
         size="md"
       />
 
+      {/* 2. FILTER BY POSITION */}
       <Select
         id="position-filter"
         labelText="Filter by position"
@@ -104,6 +120,7 @@ function PlayerSelect({ players, onSelect }) {
         ))}
       </Select>
 
+      {/* 3. SORT BY */}
       <Select
         id="sort-select"
         labelText="Sort by"
@@ -115,18 +132,30 @@ function PlayerSelect({ players, onSelect }) {
         ))}
       </Select>
 
+      {/* 4. CHOOSE A PLAYER DROPDOWN */}
       <Select
         id="player-select"
         labelText="Choose a player"
-        value=""
-        key={playerSelectKey}
-        onChange={handlePlayerChange}
+        value={selectedPlayerName}
+        onChange={(e) => handlePlayerSelect(e.target.value)}
       >
         <SelectItem value="" text={`Select a player… (${processed.length})`} />
         {processed.map((player) => (
           <SelectItem key={player.name} value={player.name} text={player.name} />
         ))}
       </Select>
+
+      {/* 5. RESET BUTTON */}
+      <div style={{ marginTop: '1rem' }}>
+        <Button
+          kind="ghost"
+          size="sm"
+          renderIcon={Reset}
+          onClick={handleResetAll}
+        >
+          Reset filters
+        </Button>
+      </div>
     </div>
   );
 }
